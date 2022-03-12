@@ -15,14 +15,20 @@
 #include "bsp_io_11.h"
 
 /* Private defines ---------------------------------------------------- */
-#define PIN 23     // Chan DI cua mach
 #define NUM_LED 10 // Tong so Led tren mach
 
 /* Private enumerate/structure ---------------------------------------- */
 /* Private macros ----------------------------------------------------- */
 /* Public variables --------------------------------------------------- */
 /* Private variables -------------------------------------------------- */
-static Adafruit_NeoPixel strip[8];
+Adafruit_NeoPixel strip_0 = Adafruit_NeoPixel(NUM_LED, IO_LED_BUFFER_0, NEO_GRB + NEO_KHZ800);
+Adafruit_NeoPixel strip_1 = Adafruit_NeoPixel(NUM_LED, IO_LED_BUFFER_1, NEO_GRB + NEO_KHZ800);
+Adafruit_NeoPixel strip_2 = Adafruit_NeoPixel(NUM_LED, IO_LED_BUFFER_2, NEO_GRB + NEO_KHZ800);
+Adafruit_NeoPixel strip_3 = Adafruit_NeoPixel(NUM_LED, IO_LED_BUFFER_3, NEO_GRB + NEO_KHZ800);
+Adafruit_NeoPixel strip_4 = Adafruit_NeoPixel(NUM_LED, IO_LED_BUFFER_4, NEO_GRB + NEO_KHZ800);
+Adafruit_NeoPixel strip_5 = Adafruit_NeoPixel(NUM_LED, IO_LED_BUFFER_5, NEO_GRB + NEO_KHZ800);
+Adafruit_NeoPixel strip_6 = Adafruit_NeoPixel(NUM_LED, IO_LED_BUFFER_6, NEO_GRB + NEO_KHZ800);
+Adafruit_NeoPixel strip_7 = Adafruit_NeoPixel(NUM_LED, IO_LED_BUFFER_7, NEO_GRB + NEO_KHZ800);
 
 /* Private function prototypes ---------------------------------------- */
 void rainbow_cycle(uint8_t wait);
@@ -30,62 +36,67 @@ void rainbow_cycle(uint8_t wait);
 /* Function definitions ----------------------------------------------- */
 void setup()
 {
-  strip[0] = Adafruit_NeoPixel(NUM_LED, IO_LED_BUFFER_0, NEO_GRB + NEO_KHZ800);
-  strip[1] = Adafruit_NeoPixel(NUM_LED, IO_LED_BUFFER_1, NEO_GRB + NEO_KHZ800);
-  strip[2] = Adafruit_NeoPixel(NUM_LED, IO_LED_BUFFER_2, NEO_GRB + NEO_KHZ800);
-  strip[3] = Adafruit_NeoPixel(NUM_LED, IO_LED_BUFFER_3, NEO_GRB + NEO_KHZ800);
-  strip[4] = Adafruit_NeoPixel(NUM_LED, IO_LED_BUFFER_4, NEO_GRB + NEO_KHZ800);
-  strip[5] = Adafruit_NeoPixel(NUM_LED, IO_LED_BUFFER_5, NEO_GRB + NEO_KHZ800);
-  strip[6] = Adafruit_NeoPixel(NUM_LED, IO_LED_BUFFER_6, NEO_GRB + NEO_KHZ800);
-  strip[7] = Adafruit_NeoPixel(NUM_LED, IO_LED_BUFFER_7, NEO_GRB + NEO_KHZ800);
+    strip_0.begin();
+    strip_1.begin();
+    strip_2.begin();
+    strip_3.begin();
+    strip_4.begin();
+    strip_5.begin();
+    strip_6.begin();
+    strip_7.begin();
 
-  for (uint8_t i = 0; i < 8; i++)
-  {
-    strip[i].begin();
-    strip[i].setBrightness(30);
-    strip[i].Color(255, 255, 255);
-    strip[i].show();
-  }
+    strip_0.setBrightness(30);
+    strip_1.setBrightness(30);
+    strip_2.setBrightness(30);
+    strip_3.setBrightness(30);
+    strip_4.setBrightness(30);
+    strip_5.setBrightness(30);
+    strip_6.setBrightness(30);
+    strip_7.setBrightness(30);
+
+    strip_0.Color(255, 255, 255);
+    strip_1.Color(255, 255, 255);
+    strip_2.Color(255, 255, 255);
+    strip_3.Color(255, 255, 255);
+    strip_4.Color(255, 255, 255);
+    strip_5.Color(255, 255, 255);
+    strip_6.Color(255, 255, 255);
+    strip_7.Color(255, 255, 255);
+
+    strip_0.show();
+    strip_1.show();
+    strip_2.show();
+    strip_3.show();
+    strip_4.show();
+    strip_5.show();
+    strip_6.show();
+    strip_7.show();
 }
 
 void loop()
 {
-  rainbow_cycle(10);
-}
+  uint16_t i;
 
-uint32_t Wheel(byte WheelPos)
-{
-  WheelPos = 255 - WheelPos;
-  if (WheelPos < 85)
+  for (i = 0; i < strip_0.numPixels(); i++)
   {
-    return strip[0].Color(255 - WheelPos * 3, 0, WheelPos * 3);
+    strip_0.setPixelColor(i, 200, 250, 0, 0);
+    strip_1.setPixelColor(i, 200, 250, 0, 0);
+    strip_2.setPixelColor(i, 200, 250, 0, 0);
+    strip_3.setPixelColor(i, 200, 250, 0, 0);
+    strip_4.setPixelColor(i, 200, 250, 0, 0);
+    strip_5.setPixelColor(i, 200, 250, 0, 0);
+    strip_6.setPixelColor(i, 200, 250, 0, 0);
+    strip_7.setPixelColor(i, 200, 250, 0, 0);
   }
-  if (WheelPos < 170)
-  {
-    WheelPos -= 85;
-    return strip[0].Color(0, WheelPos * 3, 255 - WheelPos * 3);
-  }
-  WheelPos -= 170;
-  return strip[0].Color(WheelPos * 3, 255 - WheelPos * 3, 0);
-}
 
-
-void rainbow_cycle(uint8_t wait)
-{
-  uint16_t i, j;
-
-  for (j = 0; j < 256 * 5; j++)
-  { 
-    for (uint8_t a = 0; a < 8; a++)
-    {
-      for (i = 0; i < strip[a].numPixels(); i++)
-      {
-        strip[a].setPixelColor(i, Wheel(((i * 256 / strip[a].numPixels()) + j) & 255));
-      }
-      strip[a].show();
-      delay(wait);
-    }
-  }
+  strip_0.show();
+  strip_1.show();
+  strip_2.show();
+  strip_3.show();
+  strip_4.show();
+  strip_5.show();
+  strip_6.show();
+  strip_7.show();
 }
 
 /* Private function definitions --------------------------------------- */
