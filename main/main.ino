@@ -38,13 +38,13 @@ const led_strip_info_t LED_TABLE[] =
    //     +=========================+=========+========+=====+=======+======+
    //     |Index | Pinout           | Num LED | Bright | Red | Green | Blue |
    //     +-------------------------+---------+--------+-----+-------+------+
-      INFO(0     , IO_LED_BUFFER_0  , 20      , 100    ,  255,    255,   255)
-     ,INFO(1     , IO_LED_BUFFER_1  , 20      , 100    ,  255,    255,   255)
-     ,INFO(2     , IO_LED_BUFFER_2  , 20      , 100    ,  255,    255,   255)
-     ,INFO(3     , IO_LED_BUFFER_3  , 20      , 70     ,  229,    153,   249)
-     ,INFO(4     , IO_LED_BUFFER_4  , 20      , 50     ,  204,    255,   255)
-     ,INFO(5     , IO_LED_BUFFER_5  , 20      , 30     ,   28,    110,   210)
-     ,INFO(6     , IO_LED_BUFFER_6  , 20      , 10     ,  130,      0,   186)
+      INFO(0     , IO_LED_BUFFER_0  , 300     , 100    ,  255,    255,   255)
+     ,INFO(1     , IO_LED_BUFFER_1  , 300     , 100    ,  255,    255,   255)
+     ,INFO(2     , IO_LED_BUFFER_2  , 300     , 100    ,  255,    255,   255)
+     ,INFO(3     , IO_LED_BUFFER_3  , 300     , 70     ,  229,    153,   249)
+     ,INFO(4     , IO_LED_BUFFER_4  , 300     , 50     ,  204,    255,   255)
+     ,INFO(5     , IO_LED_BUFFER_5  , 300     , 30     ,   28,    110,   210)
+     ,INFO(6     , IO_LED_BUFFER_6  , 300     , 10     ,  130,      0,   186)
    //     +======+==================+=========+========+=====+=======+======+
 };
 #undef INFO
