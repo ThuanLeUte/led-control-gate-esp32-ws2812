@@ -55,6 +55,8 @@ Adafruit_NeoPixel strip[8] = { Adafruit_NeoPixel() };
 /* Function definitions ----------------------------------------------- */
 void setup()
 {
+  pinMode(IO_BUTTON_2, INPUT);
+
   for (uint8_t i = 0; i < STRIP_MAX; i++)
   {
     strip[i].setPin(LED_TABLE[i].pin_out);
@@ -68,15 +70,42 @@ void setup()
 void loop()
 {
   uint16_t i;
+  int16_t effect;
 
-  for (uint8_t num_strip = 0; num_strip < STRIP_MAX; num_strip++)
+  if (digitalRead(IO_BUTTON_2) == HIGH)
   {
-    for (i = 0; i < strip[0].numPixels(); i++)
+    for (uint8_t num_strip = 0; num_strip < STRIP_MAX; num_strip++)
     {
-      strip[num_strip].setPixelColor(i, LED_TABLE[num_strip].red, LED_TABLE[num_strip].green, LED_TABLE[num_strip].blue, 0);
-    }
+      for (i = 0; i < strip[num_strip].numPixels(); i++)
+      {
+        strip[num_strip].setPixelColor(i, LED_TABLE[num_strip].red, LED_TABLE[num_strip].green, LED_TABLE[num_strip].blue, 0);
+      }
 
-    strip[num_strip].show();
+      strip[num_strip].show();
+    }
+  }
+  else
+  {
+    for (uint8_t step = 1; step < STRIP_MAX; step++)
+    {
+      for (uint8_t num_strip = 0; num_strip < STRIP_MAX; num_strip++)
+      {
+        for (i = 0; i < strip[num_strip].numPixels(); i++)
+        {
+          effect = num_strip - step;
+          if (effect < 0)
+          {
+            effect = STRIP_MAX + effect;
+          }
+
+          strip[num_strip].setPixelColor(i, LED_TABLE[effect].red, LED_TABLE[effect].green, LED_TABLE[effect].blue, 0);
+        }
+
+        strip[num_strip].show();
+      }
+      
+      delay(400);
+    }
   }
 }
 
