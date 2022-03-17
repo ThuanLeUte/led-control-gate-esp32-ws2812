@@ -56,6 +56,7 @@ Adafruit_NeoPixel strip[8] = { Adafruit_NeoPixel() };
 void setup()
 {
   pinMode(IO_BUTTON_2, INPUT);
+  pinMode(IO_LED_BUFFER_7, INPUT);
 
   for (uint8_t i = 0; i < STRIP_MAX; i++)
   {
@@ -72,19 +73,8 @@ void loop()
   uint16_t i;
   int16_t effect;
 
-  if (digitalRead(IO_BUTTON_2) == HIGH)
-  {
-    for (uint8_t num_strip = 0; num_strip < STRIP_MAX; num_strip++)
-    {
-      for (i = 0; i < strip[num_strip].numPixels(); i++)
-      {
-        strip[num_strip].setPixelColor(i, LED_TABLE[num_strip].red, LED_TABLE[num_strip].green, LED_TABLE[num_strip].blue, 0);
-      }
-
-      strip[num_strip].show();
-    }
-  }
-  else
+  if ((digitalRead(IO_LED_BUFFER_7) == HIGH) ||
+      (digitalRead(IO_BUTTON_2) == LOW))
   {
     for (uint8_t step = 1; step < STRIP_MAX; step++)
     {
@@ -103,8 +93,20 @@ void loop()
 
         strip[num_strip].show();
       }
-      
+
       delay(400);
+    }
+  }
+  else
+  {
+    for (uint8_t num_strip = 0; num_strip < STRIP_MAX; num_strip++)
+    {
+      for (i = 0; i < strip[num_strip].numPixels(); i++)
+      {
+        strip[num_strip].setPixelColor(i, LED_TABLE[num_strip].red, LED_TABLE[num_strip].green, LED_TABLE[num_strip].blue, 0);
+      }
+
+      strip[num_strip].show();
     }
   }
 }
