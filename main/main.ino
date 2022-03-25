@@ -15,7 +15,13 @@
 #include "bsp_io_11.h"
 
 /* Private defines ---------------------------------------------------- */
+#define __CONFIG_GATE_CONTROL   (0)
+
+#if (__CONFIG_GATE_CONTROL)
 #define STRIP_MAX (7)
+#else
+#define STRIP_MAX (8)
+#endif
 
 /* Private enumerate/structure ---------------------------------------- */
 typedef struct
@@ -33,6 +39,7 @@ led_strip_info_t;
 /* Private macros ----------------------------------------------------- */
 /* Public variables --------------------------------------------------- */
 #define INFO(_i, _io, _n, _bn, _r, _g, _b) [_i] = {.index = _i, .pin_out = _io, .num_led = _n, .brightness = _bn, .red = _r, .green = _g, .blue = _b}
+#if (__CONFIG_GATE_CONTROL)
 const led_strip_info_t LED_TABLE[] = 
 {
    //     +=========================+=========+========+=====+=======+======+
@@ -47,16 +54,39 @@ const led_strip_info_t LED_TABLE[] =
      ,INFO(6     , IO_LED_BUFFER_6  , 300     , 10     ,  130,      0,   186)
    //     +======+==================+=========+========+=====+=======+======+
 };
+#else
+const led_strip_info_t LED_TABLE[] = 
+{
+   //     +=========================+=========+========+=====+=======+======+
+   //     |Index | Pinout           | Num LED | Bright | Red | Green | Blue |
+   //     +-------------------------+---------+--------+-----+-------+------+
+      INFO(0     , IO_LED_BUFFER_0  , 300     , 100    ,  61,    122,   190)
+     ,INFO(1     , IO_LED_BUFFER_1  , 300     , 100    ,  128,    78,   159)
+     ,INFO(2     , IO_LED_BUFFER_2  , 300     , 100    ,  61,    122,   190)
+     ,INFO(3     , IO_LED_BUFFER_3  , 300     , 100    ,  128,    78,   159)
+     ,INFO(4     , IO_LED_BUFFER_4  , 300     , 100    ,  61,    122,   190)
+     ,INFO(5     , IO_LED_BUFFER_5  , 300     , 100    ,  128,    78,   159)
+     ,INFO(6     , IO_LED_BUFFER_6  , 300     , 100    ,  61,    122,   190)
+     ,INFO(7     , IO_LED_BUFFER_7  , 300     , 100    ,  128,    78,   159)
+   //     +======+==================+=========+========+=====+=======+======+
+};
+#endif
 #undef INFO
 
 /* Private variables -------------------------------------------------- */
 Adafruit_NeoPixel strip[8] = { Adafruit_NeoPixel() };
 
+/* Private function prototype ----------------------------------------- */
+void sys_led_gate_control(void);
+void sys_led_bed_control(void);
+
 /* Function definitions ----------------------------------------------- */
 void setup()
 {
+#if (__CONFIG_GATE_CONTROL)
   pinMode(IO_BUTTON_2, INPUT);
   pinMode(IO_LED_BUFFER_7, INPUT);
+#endif
 
   for (uint8_t i = 0; i < STRIP_MAX; i++)
   {
@@ -69,6 +99,15 @@ void setup()
 }
 
 void loop()
+{
+#if (__CONFIG_GATE_CONTROL)
+ sys_led_gate_control();
+#else
+ sys_led_bed_control();
+ #endif
+}
+
+void sys_led_gate_control(void)
 {
   uint16_t i;
   int16_t effect;
@@ -108,6 +147,21 @@ void loop()
 
       strip[num_strip].show();
     }
+  }
+}
+
+void sys_led_bed_control(void)
+{
+  uint16_t i;
+  
+  for (uint8_t num_strip = 0; num_strip < STRIP_MAX; num_strip++)
+  {
+    for (i = 0; i < strip[num_strip].numPixels(); i++)
+    {
+      strip[num_strip].setPixelColor(i, LED_TABLE[num_strip].red, LED_TABLE[num_strip].green, LED_TABLE[num_strip].blue, 0);
+    }
+
+    strip[num_strip].show();
   }
 }
 
